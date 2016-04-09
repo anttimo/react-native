@@ -30,7 +30,8 @@ var {
   Text,
   TouchableOpacity,
   View,
-  Image
+  Image,
+  PropTypes
 } = ReactNative;
 
 exports.displayName = (undefined: ?string);
@@ -82,6 +83,79 @@ exports.examples = [
       </View>
     );
   }
+}, {
+  title: '<ScrollView> (height = 170, snapToAlignment = center, snapToInterval = 170, decelerationRate = 0.9)',
+  description: 'ScrollView with snapping',
+  render: function() {
+    var _scrollView: ScrollView;
+    var content = [];
+    for(var i=0; i <= 20; i++) {
+      content.push(
+        <Rectangle
+          key={i}
+          index={i}
+          height={150}
+           />
+      );
+    }
+    return (
+      <View>
+        <ScrollView
+          ref={(scrollView) => { _scrollView = scrollView; }}
+          automaticallyAdjustContentInsets={false}
+          onScroll={() => { console.log('onScroll!'); }}
+          height={170}
+          snapToAlignment="center"
+          snapToInterval={170}
+          decelerationRate={0.9}
+          style={styles.snappedScrollView}>
+          {content}
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => { _scrollView.scrollTo({y: 0}); }}>
+          <Text>Scroll to top</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}, {
+  title: '<ScrollView> (horizontal = true, width = 300, snapToAlignment = center, snapToInterval = 300, decelerationRate = 0.9)',
+  description: 'Horizontal ScrollView with snapping',
+  render: function() {
+    var _scrollView: ScrollView;
+    var content = [];
+    for(var i = 0; i <= 20; i++) {
+      content.push(
+        <Rectangle
+          key={i}
+          index={i}
+          width={280}
+           />
+      );
+    }
+    return (
+      <View>
+        <ScrollView
+          ref={(scrollView) => { _scrollView = scrollView; }}
+          automaticallyAdjustContentInsets={false}
+          onScroll={() => { console.log('onScroll!'); }}
+          width={300}
+          snapToAlignment="center"
+          snapToInterval={300}
+          decelerationRate={0.9}
+          horizontal={true}
+          style={styles.snappedScrollView}>
+          {content}
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => { _scrollView.scrollTo({y: 0}); }}>
+          <Text>Scroll to top</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 }];
 
 class Thumb extends React.Component {
@@ -102,10 +176,31 @@ var THUMBS = ['https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-ash3/t39.1997/p128
 THUMBS = THUMBS.concat(THUMBS); // double length of THUMBS
 var createThumbRow = (uri, i) => <Thumb key={i} uri={uri} />;
 
+var Rectangle = React.createClass({
+  propTypes: {
+    index: PropTypes.number.isRequired,
+    height: PropTypes.number,
+    width: PropTypes.number,
+  },
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return false;
+  },
+  render: function() {
+    return (
+      <View style={[styles.rectangle, {width: this.props.width, height: this.props.height}]}>
+        <Text style={styles.rectangleText}>{this.props.index}</Text>
+      </View>
+    );
+  }
+});
+
 var styles = StyleSheet.create({
   scrollView: {
     backgroundColor: '#6A85B1',
     height: 300,
+  },
+  snappedScrollView: {
+    backgroundColor: '#6A85B1',
   },
   horizontalScrollView: {
     height: 120,
@@ -129,6 +224,23 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#eaeaea',
     borderRadius: 3,
+  },
+  rectangle: {
+    flex: 1,
+    height: 150,
+    margin: 10,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+    alignItems: 'center',
+    backgroundColor: '#eaeaea',
+    borderRadius: 3,
+  },
+  horizontalRectangle: {
+    width: 300
+  },
+  rectangleText: {
+    fontSize: 40
   },
   buttonContents: {
     flexDirection: 'row',
