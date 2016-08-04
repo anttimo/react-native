@@ -23,6 +23,7 @@
 'use strict';
 
 var React = require('react');
+var { PropTypes } = React;
 var ReactNative = require('react-native');
 var {
   ScrollView,
@@ -31,7 +32,6 @@ var {
   TouchableOpacity,
   View,
   Image,
-  PropTypes
 } = ReactNative;
 
 exports.displayName = (undefined: ?string);
